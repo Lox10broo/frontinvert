@@ -11,15 +11,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(KeyboardInput.class)
-public class KeyboardInputMixin {
+public abstract class KeyboardInputMixin extends ClientInput {
     @Inject(method = "tick", at = @At("TAIL"))
     private void frontInvert(CallbackInfo ci) {
         if (!Minecraft.getInstance().options.getCameraType().isMirrored()) return;
-        ClientInput self = (ClientInput) (Object) this;
-        Input k = self.keyPresses;
-        self.keyPresses = new Input(k.forward(), k.backward(), k.right(), k.left(),
+        Input k = this.keyPresses;
+        this.keyPresses = new Input(k.forward(), k.backward(), k.right(), k.left(),
                 k.jump(), k.shift(), k.sprint());
-        Vec2 m = self.moveVector;
-        self.moveVector = new Vec2(-m.x, m.y);
+        Vec2 m = this.moveVector;
+        this.moveVector = new Vec2(-m.x, m.y);
     }
 }
