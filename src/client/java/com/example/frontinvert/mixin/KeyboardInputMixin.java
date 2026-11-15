@@ -10,9 +10,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-KeyboardInput.class
+@Mixin(KeyboardInput.class)
 public class KeyboardInputMixin {
-    method = "tick", at = [id4526022|@At("TAIL"])
+    @Inject(method = "tick", at = @At("TAIL"))
     private void frontInvert(CallbackInfo ci) {
         if (!Minecraft.getInstance().options.getCameraType().isMirrored()) return;
         ClientInput self = (ClientInput) (Object) this;
@@ -21,26 +21,5 @@ public class KeyboardInputMixin {
                 k.jump(), k.shift(), k.sprint());
         Vec2 m = self.moveVector;
         self.moveVector = new Vec2(-m.x, m.y);
-    }
-}
-Имя: src/client/java/com/example/frontinvert/mixin/EntityMixin.java
-package com.example.frontinvert.mixin;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.Entity;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-
-Entity.class
-public class EntityMixin {
-    @ModifyVariable(method = "turn", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private double frontInvertYaw(double yRot) {
-        if ((Object) this instanceof LocalPlayer
-                && Minecraft.getInstance().options.getCameraType().isMirrored()) {
-            return -yRot;
-        }
-        return yRot;
     }
 }
