@@ -16,13 +16,6 @@
 	"environment": "*",
 	"entrypoints": {
 
-		"mixins": [
-			{
-				"config": "frontinvert.mixins.json",
-				"environment": "client"
-			}
-		],
-
 		"main": [
 			"com.example.frontinvert.FrontInvert"
 		],
